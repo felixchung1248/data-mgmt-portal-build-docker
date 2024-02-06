@@ -20,14 +20,15 @@
 
 */
 
-import React from "react";
+import React, { useState } from "react";
 
 // Chakra imports
 import {
   Box,
-  Button,
   Flex,
+  FormControl,
   Grid,
+  Input,
   Link,
   Text,
   useColorModeValue,
@@ -35,11 +36,7 @@ import {
 } from "@chakra-ui/react";
 
 // Custom components
-import Banner from "views/admin/marketplace/components/Banner";
-import TableTopCreators from "views/admin/marketplace/components/TableTopCreators";
-import HistoryItem from "views/admin/marketplace/components/HistoryItem";
-import NFT from "components/card/NFT";
-import Card from "components/card/Card.js";
+import DatasetCard from "components/card/DatasetCard";
 
 // Assets
 import Nft1 from "assets/img/nfts/Nft1.png";
@@ -48,14 +45,12 @@ import Nft3 from "assets/img/nfts/Nft3.png";
 import Nft4 from "assets/img/nfts/Nft4.png";
 import Nft5 from "assets/img/nfts/Nft5.png";
 import Nft6 from "assets/img/nfts/Nft6.png";
-import Avatar1 from "assets/img/avatars/avatar1.png";
-import Avatar2 from "assets/img/avatars/avatar2.png";
-import Avatar3 from "assets/img/avatars/avatar3.png";
-import Avatar4 from "assets/img/avatars/avatar4.png";
-import tableDataTopCreators from "views/admin/marketplace/variables/tableDataTopCreators.json";
-import { tableColumnsTopCreators } from "views/admin/marketplace/variables/tableColumnsTopCreators";
 
 export default function Marketplace() {
+
+  // States
+  const [searchString, setSearchString] = useState("");
+
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const textColorBrand = useColorModeValue("brand.500", "white");
@@ -69,7 +64,7 @@ export default function Marketplace() {
         display={{ base: "block", xl: "grid" }}>
         <Flex
           flexDirection='column'
-          gridArea={{ xl: "1 / 1 / 2 / 3", "2xl": "1 / 1 / 2 / 2" }}>
+          gridArea={{ xl: "1 / 1 / 2 / 4", "2xl": "1 / 1 / 2 / 2" }}>
           {/* <Banner /> */}
           <Flex direction='column'>
             <Flex
@@ -79,13 +74,27 @@ export default function Marketplace() {
               direction={{ base: "column", md: "row" }}
               align={{ base: "start", md: "center" }}>
               <Text color={textColor} fontSize='2xl' ms='24px' fontWeight='700'>
-                Coming soon
+                Datasets
               </Text>
               <Flex
                 align='center'
                 me='20px'
                 ms={{ base: "24px", md: "0px" }}
                 mt={{ base: "20px", md: "0px" }}>
+                <FormControl>
+                  <Input
+                    isRequired={false}
+                    variant='auth'
+                    fontSize='sm'
+                    ms={{ base: "0px", md: "0px" }}
+                    type='text'
+                    placeholder='Search...'
+                    mb='24px'
+                    fontWeight='500'
+                    size='lg'
+                    onChange={(value) => setSearchString(value.target.value)}
+                  />
+                </FormControl>
                 {/* <Link
                   color={textColorBrand}
                   fontWeight='500'
@@ -113,193 +122,52 @@ export default function Marketplace() {
               </Flex>
             </Flex>
             <SimpleGrid columns={{ base: 1, md: 3 }} gap='20px'>
-              {/* <NFT
+              { ('Abstract Colors'.toLowerCase().includes(searchString.toLowerCase()) || ('Esthera Jackson'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
                 name='Abstract Colors'
                 author='By Esthera Jackson'
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
                 image={Nft1}
-                currentbid='0.91 ETH'
+                rating={3}
                 download='#'
-              />
-              <NFT
+              />}
+              { ('ETH AI Brain'.toLowerCase().includes(searchString.toLowerCase()) || ('Nick Wilson'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
                 name='ETH AI Brain'
                 author='By Nick Wilson'
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
                 image={Nft2}
-                currentbid='0.91 ETH'
+                rating={1}
                 download='#'
-              />
-              <NFT
-                name='Mesh Gradients '
+              />}
+              { ('Mesh Gradients'.toLowerCase().includes(searchString.toLowerCase()) || ('Will Smith'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
+                name='Mesh Gradients'
                 author='By Will Smith'
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
                 image={Nft3}
-                currentbid='0.91 ETH'
+                rating={2}
                 download='#'
-              /> */}
-            </SimpleGrid>
-            {/* <Text
-              mt='45px'
-              mb='36px'
-              color={textColor}
-              fontSize='2xl'
-              ms='24px'
-              fontWeight='700'>
-              Recently Added
-            </Text> */}
-            <SimpleGrid
-              columns={{ base: 1, md: 3 }}
-              gap='20px'
-              mb={{ base: "20px", xl: "0px" }}>
-              {/* <NFT
+              />}
+              { ('Swipe Circles'.toLowerCase().includes(searchString.toLowerCase()) || ('Peter Will'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
                 name='Swipe Circles'
                 author='By Peter Will'
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
                 image={Nft4}
-                currentbid='0.91 ETH'
+                rating={0}
                 download='#'
-              />
-              <NFT
+              />}
+              { ('Colorful Heaven'.toLowerCase().includes(searchString.toLowerCase()) || ('Mark Benjamin'.toLowerCase().includes(searchString.toLowerCase())))  && <DatasetCard
                 name='Colorful Heaven'
                 author='By Mark Benjamin'
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
                 image={Nft5}
-                currentbid='0.91 ETH'
+                rating={4}
                 download='#'
-              />
-              <NFT
+              />}
+              { ('3D Cubes Art'.toLowerCase().includes(searchString.toLowerCase()) || ('Manny Gates'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
                 name='3D Cubes Art'
                 author='By Manny Gates'
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
                 image={Nft6}
-                currentbid='0.91 ETH'
+                rating={4.6}
                 download='#'
-              /> */}
+              />}
             </SimpleGrid>
           </Flex>
         </Flex>
-        <Flex
-          flexDirection='column'
-          gridArea={{ xl: "1 / 3 / 2 / 4", "2xl": "1 / 2 / 2 / 3" }}>
-          {/* <Card px='0px' mb='20px'>
-            <TableTopCreators
-              tableData={tableDataTopCreators}
-              columnsData={tableColumnsTopCreators}
-            />
-          </Card> */}
-          {/* <Card p='0px'>
-            <Flex
-              align={{ sm: "flex-start", lg: "center" }}
-              justify='space-between'
-              w='100%'
-              px='22px'
-              py='18px'>
-              <Text color={textColor} fontSize='xl' fontWeight='600'>
-                History
-              </Text>
-              <Button variant='action'>See all</Button>
-            </Flex>
-
-            <HistoryItem
-              name='Colorful Heaven'
-              author='By Mark Benjamin'
-              date='30s ago'
-              image={Nft5}
-              price='0.91 ETH'
-            />
-            <HistoryItem
-              name='Abstract Colors'
-              author='By Esthera Jackson'
-              date='58s ago'
-              image={Nft1}
-              price='0.91 ETH'
-            />
-            <HistoryItem
-              name='ETH AI Brain'
-              author='By Nick Wilson'
-              date='1m ago'
-              image={Nft2}
-              price='0.91 ETH'
-            />
-            <HistoryItem
-              name='Swipe Circles'
-              author='By Peter Will'
-              date='1m ago'
-              image={Nft4}
-              price='0.91 ETH'
-            />
-            <HistoryItem
-              name='Mesh Gradients '
-              author='By Will Smith'
-              date='2m ago'
-              image={Nft3}
-              price='0.91 ETH'
-            />
-            <HistoryItem
-              name='3D Cubes Art'
-              author='By Manny Gates'
-              date='3m ago'
-              image={Nft6}
-              price='0.91 ETH'
-            />
-          </Card> */}
-        </Flex>
       </Grid>
-      {/* Delete Product */}
     </Box>
   );
 }

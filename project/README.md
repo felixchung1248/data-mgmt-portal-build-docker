@@ -1,5 +1,7 @@
 # data-management-portal
 
+## Run on Docker
+
 ## Run locally
 
 1. Download [nvm](https://github.com/creationix/nvm)
