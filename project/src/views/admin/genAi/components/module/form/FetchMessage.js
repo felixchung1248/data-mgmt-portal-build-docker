@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from './Loading';
+import config from 'config'
 
 class FetchMessage extends Component {
   state = {
@@ -24,7 +25,7 @@ class FetchMessage extends Component {
         // Include other properties from the step or user input if needed
       };
 
-      const response = await fetch('http://datamgmtdemo01.eastasia.cloudapp.azure.com/genai-response', {
+      const response = await fetch(`http://${config.genAiHost}/genai-response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

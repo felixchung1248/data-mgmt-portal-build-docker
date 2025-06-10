@@ -25,8 +25,11 @@ import PropTypes from "prop-types";
 // Assets
 import { IoMenuOutline } from "react-icons/io5";
 
+// import { generateRoutes } from "routes";
+
 function Sidebar(props) {
   const { routes } = props;
+  // const loginName = localStorage.getItem('loginName')
 
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
@@ -34,7 +37,7 @@ function Sidebar(props) {
     "unset"
   );
   // Chakra Color Mode
-  let sidebarBg = useColorModeValue("white", "navy.800");
+  let sidebarBg = useColorModeValue("gray.700", "gray.700");
   let sidebarMargins = "0px";
 
   // SIDEBAR

@@ -20,7 +20,8 @@
 
 */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 
 // Chakra imports
 import {
@@ -39,24 +40,63 @@ import {
 import DatasetCard from "components/card/DatasetCard";
 
 // Assets
-import Nft1 from "assets/img/nfts/Nft1.png";
-import Nft2 from "assets/img/nfts/Nft2.png";
-import Nft3 from "assets/img/nfts/Nft3.png";
-import Nft4 from "assets/img/nfts/Nft4.png";
-import Nft5 from "assets/img/nfts/Nft5.png";
-import Nft6 from "assets/img/nfts/Nft6.png";
+import Config from "config";
+
+
 
 export default function Marketplace() {
 
   // States
   const [searchString, setSearchString] = useState("");
+  const [datasets, setDatasets] = useState([]);
+  const [permissions, setPermissions] = useState([]);
 
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const textColorBrand = useColorModeValue("brand.500", "white");
+
+
+
+
+
+  useEffect(() => {
+    const fetchDatasets = async () => {
+      try {
+        const response = await fetch(`http://${Config.manageDataCatalogHost}/listalldatacatalogdatasets`);
+        const data = await response.json();
+        // Create a new array from the fetched data
+        const loadedDatasets = Object.keys(data).map(key => ({
+          datasetname: data[key].dataset_name,
+          owner: data[key].owners[0].owner_name,
+          table_description: data[key].table_description,
+          rating: data[key].rating,
+          fields: data[key].fields
+        }));
+        // Update the state with the new array
+        setDatasets(loadedDatasets);
+      } catch (error) {
+        console.error("Failed to fetch datasets:", error);
+      }
+    };
+    fetchDatasets();
+
+    const fetchPermissions = async () => {
+      try {
+        const response = await fetch(`http://${Config.listDatasetHost}/check-user-access?username=${localStorage.getItem('loginName').split('@')[0]}`);
+        const datasetsPermissions = await response.json();
+        // Update the state with the new array
+        setPermissions(datasetsPermissions);
+      } catch (error) {
+        console.error("Failed to fetch permissions:", error);
+      }
+    };
+    fetchPermissions();
+  }, []);
+
   return (
     <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
       {/* Main Fields */}
+
       <Grid
         mb='20px'
         gridTemplateColumns={{ xl: "repeat(3, 1fr)", "2xl": "1fr 0.46fr" }}
@@ -95,75 +135,23 @@ export default function Marketplace() {
                     onChange={(value) => setSearchString(value.target.value)}
                   />
                 </FormControl>
-                {/* <Link
-                  color={textColorBrand}
-                  fontWeight='500'
-                  me={{ base: "34px", md: "44px" }}
-                  to='#art'>
-                  Art
-                </Link>
-                <Link
-                  color={textColorBrand}
-                  fontWeight='500'
-                  me={{ base: "34px", md: "44px" }}
-                  to='#music'>
-                  Music
-                </Link>
-                <Link
-                  color={textColorBrand}
-                  fontWeight='500'
-                  me={{ base: "34px", md: "44px" }}
-                  to='#collectibles'>
-                  Collectibles
-                </Link>
-                <Link color={textColorBrand} fontWeight='500' to='#sports'>
-                  Sports
-                </Link> */}
               </Flex>
             </Flex>
             <SimpleGrid columns={{ base: 1, md: 3 }} gap='20px'>
-              { ('Abstract Colors'.toLowerCase().includes(searchString.toLowerCase()) || ('Esthera Jackson'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
-                name='Abstract Colors'
-                author='By Esthera Jackson'
-                image={Nft1}
-                rating={3}
-                download='#'
-              />}
-              { ('ETH AI Brain'.toLowerCase().includes(searchString.toLowerCase()) || ('Nick Wilson'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
-                name='ETH AI Brain'
-                author='By Nick Wilson'
-                image={Nft2}
-                rating={1}
-                download='#'
-              />}
-              { ('Mesh Gradients'.toLowerCase().includes(searchString.toLowerCase()) || ('Will Smith'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
-                name='Mesh Gradients'
-                author='By Will Smith'
-                image={Nft3}
-                rating={2}
-                download='#'
-              />}
-              { ('Swipe Circles'.toLowerCase().includes(searchString.toLowerCase()) || ('Peter Will'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
-                name='Swipe Circles'
-                author='By Peter Will'
-                image={Nft4}
-                rating={0}
-                download='#'
-              />}
-              { ('Colorful Heaven'.toLowerCase().includes(searchString.toLowerCase()) || ('Mark Benjamin'.toLowerCase().includes(searchString.toLowerCase())))  && <DatasetCard
-                name='Colorful Heaven'
-                author='By Mark Benjamin'
-                image={Nft5}
-                rating={4}
-                download='#'
-              />}
-              { ('3D Cubes Art'.toLowerCase().includes(searchString.toLowerCase()) || ('Manny Gates'.toLowerCase().includes(searchString.toLowerCase()))) && <DatasetCard
-                name='3D Cubes Art'
-                author='By Manny Gates'
-                image={Nft6}
-                rating={4.6}
-                download='#'
-              />}
+              {
+                datasets.map((dataset, index) => (
+                  (dataset.owner.toLowerCase().includes(searchString.toLowerCase()) || (dataset.datasetname.toLowerCase().includes(searchString.toLowerCase()))) &&
+                  <DatasetCard
+                    key={index}
+                    owner={dataset.owner}
+                    table_description={dataset.table_description}
+                    datasetname={dataset.datasetname}
+                    rating={dataset.rating}
+                    fields={dataset.fields}
+                    hasAccess={permissions.includes(dataset.datasetname)}
+                  />
+                ))
+              }
             </SimpleGrid>
           </Flex>
         </Flex>

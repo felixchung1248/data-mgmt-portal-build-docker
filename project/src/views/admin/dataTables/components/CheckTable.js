@@ -27,13 +27,16 @@ import {
 
 // Custom components
 import Card from "components/card/Card";
-import Menu from "components/menu/MainMenu";
+import config from 'config'
+
 export default function CheckTable(props) {
   const { columnsData, tableData, titleData, error, setError, isOpen, setIsOpen } = props;
-  const tableDataFields = tableData.fields;
+  const tableDataFields = tableData;
   // const [ isError, setIsError ] = useState(false)
 
   const columns = useMemo(() => columnsData, [columnsData]);
+  // console.log(columnsData)
+  // console.log(tableDataFields)
   const data = useMemo(() => tableDataFields, [tableDataFields]);
 
   const tableInstance = useTable(
@@ -59,6 +62,8 @@ export default function CheckTable(props) {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const errorColor = useColorModeValue("red.600", "orange.100");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+
+  const loginName = localStorage.getItem('loginName')
 
   function validateDescription(value) {
     let error;
@@ -89,7 +94,7 @@ export default function CheckTable(props) {
               const descriptionValueKey = `description_${index}`;
               const isSensitiveValueKey = `isSensitive_${index}`;
               let description = values[descriptionValueKey];
-              let is_sensitive = values[isSensitiveValueKey] ? 1 : 0;
+              let is_sensitive = values[isSensitiveValueKey];
 
               return {
                 ...field,
@@ -99,26 +104,24 @@ export default function CheckTable(props) {
             });
             const tempResult = transformedValues.map(item => ({
               ...item, // Spread the rest of the properties
-              data_type: item.type.name, // Add new datatype property
+              data_type: item.type, // Add new datatype property
               type: undefined // Set type as undefined to remove it from the object
             })).map(item => {
               const { type, ...rest } = item; // Destructure to exclude the type property
               return rest;
             })
-            const finalResult = tempResult.map(
-              item => ({
-                ...item
-                , dataset_path: titleData
-                , create_datetime: new Date().toISOString()
-                , create_user: "frontend"
-                , last_modified_datetime: new Date().toISOString()
-                , last_modified_user: "frontend"
-              })
-            );
+
+            const finalResult = {
+              field_definition: tempResult
+              , dataset_path: titleData
+              , customer: loginName
+              ,table_description: values['table-description']
+            };
+
             // console.log(JSON.stringify(finalResult, null, 2))
             const body = JSON.stringify(finalResult)
             console.log(body)
-            const url = "http://datamgmtdemo01.eastasia.cloudapp.azure.com/request-dataset-deploy"
+            const url = `http://${config.submitTicketHost}/submit-ticket`
             // const url = "http://localhost:5001/request-dataset-deploy"
 
             fetch(url, {
@@ -136,7 +139,7 @@ export default function CheckTable(props) {
             }).then((text) => {
               if (text == 'There has already been pending request for this dataset for approval')
                 setError(text)
-              if (text == 'Data catalog draft can be imported successfully')
+              if (text == 'Ticket submitted successfully.')
                 setIsOpen(true)
             })
 
@@ -173,6 +176,35 @@ export default function CheckTable(props) {
                 {titleData}
               </Text>
               {/* <Menu /> */}
+            </Flex>
+            <Flex px='25px' justify='space-between' mb='20px' align='center'>
+            <Text
+                color={textColor}
+                fontSize='15px'
+                fontWeight='700'
+                lineHeight='100%'>
+                Table Description:
+              </Text>
+              
+              <Field name="table-description" validate={validateDescription}>
+                              {({ field, form }) => (
+                                <FormControl isInvalid={form.errors[field.name] && form.touched.name}>
+                                  {/* <FormLabel htmlFor="name">First name</FormLabel> */}
+                                  <Input
+                                    {...field}
+                                    // id="description"
+                                    placeholder="Table Description"
+                                    color={textColor}
+                                    fontSize='sm'
+                                    fontWeight='700'
+                                    borderRadius='16px'
+                                    // width="50%"
+                                    isRequired="true"
+                                  />
+                                  <FormErrorMessage>{form.errors[field.name]}</FormErrorMessage>
+                                </FormControl>
+                              )}
+                            </Field>
             </Flex>
             <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
               <Thead>
@@ -224,7 +256,7 @@ export default function CheckTable(props) {
                                 color={textColor}
                                 fontSize='sm'
                                 fontWeight='700'>
-                                {cell.value.name}
+                                {cell.value}
                               </Text>
                             </Flex>
                           );
@@ -278,7 +310,7 @@ export default function CheckTable(props) {
                 })}
               </Tbody>
             </Table>
-            SQL logic: {tableData.sql}
+            {/* SQL logic: {tableData.sql} */}
             <Button
               mt={4}
               colorScheme="brand"

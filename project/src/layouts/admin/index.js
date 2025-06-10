@@ -7,7 +7,7 @@ import Sidebar from 'components/sidebar/Sidebar.js';
 import { SidebarContext } from 'contexts/SidebarContext';
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import routes from 'routes.js';
+import { generateRoutes } from 'routes.js';
 
 // Custom Chakra theme
 export default function Dashboard(props) {
@@ -108,7 +108,7 @@ export default function Dashboard(props) {
 						toggleSidebar,
 						setToggleSidebar
 					}}>
-					<Sidebar routes={routes} display='none' {...rest} />
+					<Sidebar routes={generateRoutes(localStorage.getItem('loginName'))} display='none' {...rest} />
 					<Box
 						float='right'
 						minHeight='100vh'
@@ -129,9 +129,9 @@ export default function Dashboard(props) {
 								<Navbar
 									onOpen={onOpen}
 									logoText={'Horizon UI Dashboard PRO'}
-									brandText={getActiveRoute(routes)}
-									secondary={getActiveNavbar(routes)}
-									message={getActiveNavbarText(routes)}
+									brandText={getActiveRoute(generateRoutes(localStorage.getItem('loginName')))}
+									secondary={getActiveNavbar(generateRoutes(localStorage.getItem('loginName')))}
+									message={getActiveNavbarText(generateRoutes(localStorage.getItem('loginName')))}
 									fixed={fixed}
 									{...rest}
 								/>
@@ -141,7 +141,7 @@ export default function Dashboard(props) {
 						{getRoute() ? (
 							<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
 								<Switch>
-									{getRoutes(routes)}
+									{getRoutes(generateRoutes(localStorage.getItem('loginName')))}
 									<Redirect from='/' to='/admin/default' />
 								</Switch>
 							</Box>
