@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import Config from "config";
-import logo from 'assets/img/logo/ey.png';
+// import logo from 'assets/img/logo/ey.png';
 import backgroundImage from 'assets/img/layout/steve-johnson-VVxQEpum11g-unsplash.jpg'; 
 
 const CFaUserAlt = chakra(FaUserAlt);
@@ -87,7 +87,7 @@ export default function Login() {
         >
             <Box as="header" p="4">
                 <Flex justifyContent="flex-start" alignItems="center" width="100%" paddingX="20px"> {/* Control the logo's position independently */}
-                    <img src={logo} alt='Logo' style={{ width: '35px', height: 'auto' }} />
+                    {/* <img src={logo} alt='Logo' style={{ width: '35px', height: 'auto' }} /> */}
                     <Text color="white" ml="4">Data Fabric portal demo</Text>
                 </Flex>
             </Box>

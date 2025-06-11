@@ -113,7 +113,7 @@ export default function CheckTable(props) {
 
             const finalResult = {
               field_definition: tempResult
-              , dataset_path: titleData
+              , dataset_path: titleData.tableSchema + "." + titleData.tableName
               , customer: loginName
               ,table_description: values['table-description']
             };
@@ -173,7 +173,7 @@ export default function CheckTable(props) {
                 fontSize='22px'
                 fontWeight='700'
                 lineHeight='100%'>
-                {titleData}
+                {titleData.tableSchema + "." + titleData.tableName}
               </Text>
               {/* <Menu /> */}
             </Flex>

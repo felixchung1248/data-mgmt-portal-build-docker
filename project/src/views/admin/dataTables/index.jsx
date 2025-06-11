@@ -84,11 +84,11 @@ export default function Settings() {
   const columnsDataCheck = [
     {
       Header: "COLUMN NAME",
-      accessor: "name",
+      accessor: "COLUMN_NAME",
     },
     {
       Header: "DATA TYPE",
-      accessor: "type",
+      accessor: "DATA_TYPE",
     },
     {
       Header: "DESCRIPTION",
@@ -107,7 +107,7 @@ export default function Settings() {
     }
     setError(null)
     const descDatasetUrl = `http://${config.listDatasetHost}/showdatasetdesc`
-    const url = `${descDatasetUrl}?name=${selectedOption.value}`
+    const url = `${descDatasetUrl}?name=${selectedOption.value.tableName}&path=${selectedOption.value.tableSchema}&catalog=${selectedOption.value.tableCatalog}`
     fetch(url)
       .then((res) => {
         if (!res.ok) {
@@ -222,7 +222,7 @@ export default function Settings() {
               isRtl={isRtl}
               isSearchable={isSearchable}
               name="color"
-              options={data.map(item => ({ value: item, label: item }))}
+              options={data.map(item => ({ value: {tableSchema: item.TABLE_SCHEMA, tableName: item.TABLE_NAME, viewDefinition: item.VIEW_DEFINITION, tableCatalog: item.TABLE_CATALOG}, label: item.TABLE_SCHEMA + "." + item.TABLE_NAME }))}
               styles={customStyles}
             />
           )}
