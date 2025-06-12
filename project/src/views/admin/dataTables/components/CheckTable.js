@@ -103,8 +103,10 @@ export default function CheckTable(props) {
               };
             });
             const tempResult = transformedValues.map(item => ({
-              ...item, // Spread the rest of the properties
-              data_type: item.type, // Add new datatype property
+              name: item.COLUMN_NAME,
+              description: item.description,
+              is_sensitive: item.is_sensitive,
+              data_type: item.DATA_TYPE, // Add new datatype property
               type: undefined // Set type as undefined to remove it from the object
             })).map(item => {
               const { type, ...rest } = item; // Destructure to exclude the type property
