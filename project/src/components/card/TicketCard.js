@@ -32,7 +32,7 @@ export default function TicketCard(props) {
   const [tableData, setTableData] = useState([]);
   const [sampleData, setSampleData] = useState([]);
   const [sampleColumnData, setSampleColumnData] = useState([]);
-  const { title, firstname, lastname, email, id, datasetname, tabledescription } = props;
+  const { title, firstname, lastname, email, id, datasetname, tabledescription, schemaname } = props;
   const [like, setLike] = useState(false);
   const textColor = useColorModeValue("navy.700", "white");
   const textColorBid = useColorModeValue("brand.500", "white");
@@ -101,7 +101,7 @@ export default function TicketCard(props) {
         console.error(error)
       });
 
-    const dataSampleUrl = `http://${Config.dataPropagateHost}/datapropagate?view=${datasetname}&count=10`
+    const dataSampleUrl = `http://${Config.dataPropagateHost}/datapropagate?view=${datasetname}&schema=${schemaname}&count=10`
 
     fetch(dataSampleUrl)
       .then((res) => {
@@ -122,12 +122,12 @@ export default function TicketCard(props) {
       });
   };
 
-  const approveTicket = (ticket_id, ticket_title, datasetname, email) => {
+  const approveTicket = (ticket_id, ticket_title, datasetname, email, schemaname) => {
     if (ticket_id === null) {
       return;
     }
 
-    const approveTicketUrl = `http://${Config.manageTicketHost}/approveticket?ticketId=${ticket_id}&datasetName=${datasetname}&datasetOwner=${email}&datasetDescription=${tabledescription}`
+    const approveTicketUrl = `http://${Config.manageTicketHost}/approveticket?ticketId=${ticket_id}&datasetName=${datasetname}&datasetOwner=${email}&datasetDescription=${tabledescription}&schemaName=${schemaname}`
     const approveAccessUrl = `http://${Config.manageTicketHost}/approve-access?ticketId=${ticket_id}&datasetName=${datasetname}&user=${email.split('@')[0]}`
 
     const requestOptions = {
@@ -328,7 +328,7 @@ export default function TicketCard(props) {
                     xl: "10px",
                     "2xl": "0px",
                   }}
-                  onClick={() => approveTicket(id, title, datasetname, email)}
+                  onClick={() => approveTicket(id, title, datasetname, email, schemaname)}
                 >
                   {'Approve'}
                 </Button>

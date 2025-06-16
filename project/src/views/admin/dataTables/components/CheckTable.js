@@ -115,7 +115,8 @@ export default function CheckTable(props) {
 
             const finalResult = {
               field_definition: tempResult
-              , dataset_path: titleData.tableSchema + "." + titleData.tableName
+              , dataset_path: titleData.tableName
+              , schema: titleData.tableSchema
               , customer: loginName
               ,table_description: values['table-description']
             };

@@ -63,7 +63,8 @@ export default function Approval() {
           email: data[key].customer_email,
           id: data[key].id,
           datasetname: data[key].datasetname,
-          tabledescription: data[key].table_description
+          tabledescription: data[key].table_description,
+          schemaname: data[key].schemaname
         }));
         // Update the state with the new array
         setTickets(loadedTickets);
@@ -110,6 +111,7 @@ export default function Approval() {
                     id={ticket.id}
                     datasetname={ticket.datasetname}
                     tabledescription={ticket.tabledescription}
+                    schemaname={ticket.schemaname}
                   />
                 ))
               }

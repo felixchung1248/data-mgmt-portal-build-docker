@@ -83,7 +83,7 @@ export default function DatasetCard(props) {
         setIsOpen(true);
 
 
-    const dataSampleUrl = `http://${Config.dataPropagateHost}/datapropagate?view=${datasetname}&count=10`
+    const dataSampleUrl = `http://${Config.dataPropagateHost}/datapropagate?view=${datasetname}&count=10&env=PROD`
 
     fetch(dataSampleUrl)
       .then((res) => {
@@ -279,23 +279,23 @@ export default function DatasetCard(props) {
               onClick={() => {
                 setRequested(true);
 
-                fetch(`http://${Config.submitTicketHost}/submit-access-request`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    dataset_name: datasetname,
-                    user: localStorage.getItem('loginName')
-                  })
-                }).then((res) => {
-                  if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                  }
-                  return res.text();
-                }).then((text) => {
-                    console.log(text)
-                })
+                // fetch(`http://${Config.submitTicketHost}/submit-access-request`, {
+                //   method: 'POST',
+                //   headers: {
+                //     'Content-Type': 'application/json'
+                //   },
+                //   body: JSON.stringify({
+                //     dataset_name: datasetname,
+                //     user: localStorage.getItem('loginName')
+                //   })
+                // }).then((res) => {
+                //   if (!res.ok) {
+                //     throw new Error('Network response was not ok');
+                //   }
+                //   return res.text();
+                // }).then((text) => {
+                //     console.log(text)
+                // })
               }}
               isDisabled={requested}>
               {requested ? 'Request submitted' : 'Request access'}

@@ -90,7 +90,7 @@ export default function Marketplace() {
         console.error("Failed to fetch permissions:", error);
       }
     };
-    fetchPermissions();
+    // fetchPermissions();
   }, []);
 
   return (
